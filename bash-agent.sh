@@ -7,7 +7,7 @@ CONFIG_DIR="$HOME/.config/nodemixaholic-software/agentic-bash"
 CONFIG_FILE="$CONFIG_DIR/config.sh"
 
 # Define default settings (these are informational now, but loaded)
-DEFAULT_MODEL="llama3" 
+DEFAULT_MODEL="deepseek-r1:7b" 
 DEFAULT_HOST="http://localhost:11434"
 
 # --- Function Definitions ---
