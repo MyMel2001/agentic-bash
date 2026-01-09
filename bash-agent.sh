@@ -8,7 +8,7 @@ CONFIG_FILE="$CONFIG_DIR/config.sh"
 # Sammy's Thinker-Doer Setup
 DEFAULT_PLANNER="deepseek-r1:14b" 
 DEFAULT_ACTOR="ministral-3:8b"
-DEFAULT_HOST="http://localhost:11434"
+DEFAULT_HOST="http://100.92.246.90:11434"
 
 # --- Function Definitions ---
 
