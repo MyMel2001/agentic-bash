@@ -7,7 +7,7 @@ CONFIG_FILE="$CONFIG_DIR/config.sh"
 # Sammy's Model Pairing
 PLANNER_MODEL="deepseek-r1:14b" 
 ACTOR_MODEL="ministral-3:8b"
-HOST="http://localhost:11434"
+HOST="http://100.92.246.90:11434"
 
 # --- System Prompts ---
 
