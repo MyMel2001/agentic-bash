@@ -1,92 +1,66 @@
 #!/bin/bash
 
 # --- Configuration Section ---
-
 CONFIG_DIR="$HOME/.config/nodemixaholic-software/agentic-bash"
 CONFIG_FILE="$CONFIG_DIR/config.sh"
 
-# Sammy's Thinker-Doer Setup
-DEFAULT_PLANNER="deepseek-r1:14b" 
-DEFAULT_ACTOR="ministral-3:8b"
-DEFAULT_HOST="http://100.92.246.90:11434"
+# Sammy's Model Pairing
+PLANNER_MODEL="deepseek-r1:14b" 
+ACTOR_MODEL="ministral-3:8b"
+HOST="http://localhost:11434"
 
-# --- Function Definitions ---
+# --- System Prompts ---
 
-ensure_config() {
-    mkdir -p "$CONFIG_DIR"
-    if [ ! -f "$CONFIG_FILE" ]; then
-        cat <<EOF > "$CONFIG_FILE"
-PLANNER_MODEL="$DEFAULT_PLANNER"
-ACTOR_MODEL="$DEFAULT_ACTOR"
-HOST="$DEFAULT_HOST"
-EOF
-    fi
-}
-ensure_config > /dev/null
+# This prompt forces DeepSeek to focus on the 'Why' and the 'How' without writing the 'What'
+PLANNER_SYSTEM="You are a Linux Systems Architect. Your only job is to create a logical plan for a task. 
+1. Analyze the user request for safety and OS compatibility. 
+2. List the necessary steps and utilities required (e.g., find, sed, grep).
+3. Warn about any destructive side effects.
+DO NOT output a final bash command. Focus on the technical strategy."
 
-. "$CONFIG_FILE"
-PLANNER_RUN="$PLANNER_MODEL"
-ACTOR_RUN="$ACTOR_MODEL"
-HOST_RUN="$HOST"
-PROMPT_REQUEST=""
+# This prompt tells Ministral to be the precise translator
+ACTOR_SYSTEM="You are a Senior DevOps Engineer. You will receive a technical plan. 
+Your job is to translate that plan into a single, high-performance, one-line bash command. 
+Rules: No markdown, no explanations, no backticks. Only the executable string."
 
-parse_arguments() {
-    while [ "$#" -gt 0 ]; do
-        case "$1" in
-            --planner) PLANNER_RUN="$2"; shift 2 ;;
-            --actor) ACTOR_RUN="$2"; shift 2 ;;
-            *) [ -z "$PROMPT_REQUEST" ] && PROMPT_REQUEST="$1"; shift ;;
-        esac
-    done
-}
+# --- Logic Execution ---
 
-# --- Execution ---
-
-parse_arguments "$@"
-
+PROMPT_REQUEST="$1"
 if [ -z "$PROMPT_REQUEST" ]; then
-    echo "Usage: $0 \"<request>\" [--planner <model>] [--actor <model>]" >&2
+    echo "Usage: $0 \"<request>\"" >&2
     exit 1
 fi
 
-# Get OS details for the Planner
 [ -f /etc/os-release ] && . /etc/os-release || PRETTY_NAME="Linux"
 
-# 1. THE PLANNING PHASE (DeepSeek-R1)
-echo "🧠 Thinker ($PLANNER_RUN): Evaluating request..." >&2
+# 1. THE PLANNING PHASE (DeepSeek-R1-14B)
+echo "🧠 Planner Thinking ($PLANNER_MODEL)..." >&2
 
-# We allow the planner to show its thinking so you can see the logic
-PLAN_OUTPUT=$(OLLAMA_HOST="$HOST_RUN" ollama run "$PLANNER_RUN" \
-"System: You are a Linux Expert.
-User Context: $PRETTY_NAME. Current Directory: $(pwd).
-Task: Create a plan to: $PROMPT_REQUEST.
-Instructions: Explain your logic briefly, then provide the best command.")
+PLAN_OUTPUT=$(OLLAMA_HOST="$HOST" ollama run "$PLANNER_MODEL" \
+"System: $PLANNER_SYSTEM
+Context: $PRETTY_NAME | User: $USER | PWD: $(pwd)
+Request: $PROMPT_REQUEST")
 
-# 2. THE ACTING PHASE (Ministral-3)
-echo "🛠️  Doer ($ACTOR_RUN): Generating final command..." >&2
+# 2. THE ACTING PHASE (Ministral-3-8B)
+echo "🛠️  Actor Executing ($ACTOR_MODEL)..." >&2
 
-# We pass the Planner's output to the Actor to get a clean, single-line command
-FINAL_CMD=$(OLLAMA_HOST="$HOST_RUN" ollama run "$ACTOR_RUN" \
-"Extract only the executable bash command from this plan. 
-Rules: 
-1. Output ONLY the command. 
-2. No markdown, no backticks, no explanations.
-3. If multiple steps are needed, use '&&'.
-Plan: $PLAN_OUTPUT" | tr -d '\n\r')
+FINAL_CMD=$(OLLAMA_HOST="$HOST" ollama run "$ACTOR_MODEL" \
+"System: $ACTOR_SYSTEM
+Plan to convert: $PLAN_OUTPUT" | tr -d '\n\r')
 
-# 3. OUTPUT & EXECUTION
-echo -e "\n--- 🧠 THINKER'S REASONING ---"
+# --- UI & Execution ---
+
+echo -e "\n\033[1;34m[STRATEGY]\033[0m"
 echo "$PLAN_OUTPUT"
-echo -e "-----------------------------\n"
+echo -e "--------------------------------------"
 
-echo "🤖 PROPOSED COMMAND:"
-echo -e "\033[1;32m$FINAL_CMD\033[0m"
-echo "---"
+echo -e "\033[1;32m[PROPOSED COMMAND]\033[0m"
+echo "$FINAL_CMD"
+echo -e "--------------------------------------"
 
-read -r -p "Execute? (y/N): " confirmation
+read -r -p "Run this command? (y/N): " confirmation
 if [[ "$confirmation" =~ ^[Yy]$ ]]; then
-    echo "🚀 Executing..."
     eval "$FINAL_CMD"
 else
-    echo "❌ Cancelled."
+    echo "❌ Aborted."
 fi
