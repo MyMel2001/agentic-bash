@@ -23,8 +23,8 @@ Instead of forcing a single LLM to struggle through doing the thinking and the t
 ***Q: Is my data sent to OpenAI/Microsoft?***
 A: No - not unless you explicitly choose to. It is processed entirely on your local GPU, your own local network server, or an Ollama-powered cloud server of your choosing. If done locally, your terminal history and local directories remain yours. Imagine that.
 
-***Q: Can it run on Haiku OS?***
-A: No, because Ollama command isn't on Haiku AFAIK and I can't be damned to port it. Sorry, Sean.
+***Q: Can it run on Haiku?***
+A: Yes! I have recently started working on connecting to the API via "curl" instead of "ollama" - so we should be able to run it on Haiku.
 
 ***Q: What if the AI generates a command that formats my drive?***
 A: That's why there is a literal Run this command? (y/N) prompt gate in the code. You are the final supervisor. If you press 'y' on rm -rf / --no-preserve-root, that's on you, boss.
