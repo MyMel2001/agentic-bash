@@ -18,7 +18,7 @@ HOST="100.118.11.83:11434"
 # --- System Prompts ---
 
 # This prompt forces DeepSeek to focus on the 'Why' and the 'How' without writing the 'What'
-PLANNER_SYSTEM="You are a Linux Systems Architect. Your ONLY 
+PLANNER_SYSTEM="You are a Unix-like Systems Architect. Your ONLY 
 job is to create a logical plan for a task. NEVER OUTPUT ANY 
 FULL BASH COMMANDS, however outputting programs and arguments 
 sperately is fine as long as they are not giving away the answer
