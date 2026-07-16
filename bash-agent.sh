@@ -44,7 +44,7 @@ fi
 
 [ -f /etc/os-release ] && . /etc/os-release || PRETTY_NAME="Linux"
 
-# 1. THE PLANNING PHASE (DeepSeek-R1-14B)
+# 1. THE PLANNING PHASE
 echo "🧠 Planner Thinking ($PLANNER_MODEL)..." >&2
 
 PLAN_OUTPUT=$(OLLAMA_HOST="$HOST" ollama run "$PLANNER_MODEL" \
