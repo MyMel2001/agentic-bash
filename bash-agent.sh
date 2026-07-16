@@ -65,13 +65,11 @@ PLAN_OUTPUT=$(curl -s "http://$HOST/api/generate" -d "{
 }" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//' | sed 's/\\n/\n/g' | sed 's/\\"/"/g')
 
 # 2. THE ACTING PHASE 
+echo "CONTINUE?"
+read
 echo "🛠️  Actor Executing ($ACTOR_MODEL)..." >&2
 
-FINAL_CMD=$(curl -s "http://$HOST/api/generate" -d "{
-  \"model\": \"$ACTOR_MODEL\",
-  \"prompt\": \"System: $ACTOR_SYSTEM\nPlan to convert: $PLAN_OUTPUT\",
-  \"stream\": false
-}" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//' | tr -d '\n\r')
+
 
 # --- UI & Execution ---
 
@@ -85,7 +83,11 @@ echo -e "--------------------------------------"
 
 read -r -p "Run this command? (y/N): " confirmation
 if [[ "$confirmation" =~ ^[Yy]$ ]]; then
-    eval "$FINAL_CMD"
+    curl -s "http://$HOST/api/generate" -d "{
+  \"model\": \"$ACTOR_MODEL\",
+  \"prompt\": \"System: $ACTOR_SYSTEM\nPlan to convert: $PLAN_OUTPUT\",
+  \"stream\": false
+}" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//' | tr -d '\n\r'
 else
     echo "❌ Aborted."
 fi
