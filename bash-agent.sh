@@ -10,7 +10,7 @@ touch "$CONFIG_FILE"
 touch "$ACTOR_EXTRA_DEETS"
 
 # Sammy's Model Pairing
-PLANNER_MODEL="gemma4:cloud" 
+PLANNER_MODEL="gemma4:12b" 
 ACTOR_MODEL="deepseek-v4-flash:cloud"
 HOST="100.118.11.83:11434"
 
