@@ -57,17 +57,21 @@ fi
 # 1. THE PLANNING PHASE
 echo "🧠 Planner Thinking ($PLANNER_MODEL)..." >&2
 
-PLAN_OUTPUT=$(OLLAMA_HOST="$HOST" ollama run "$PLANNER_MODEL" \
-"System: $PLANNER_SYSTEM
-Context: $PRETTY_NAME | User: $USER | PWD: $(pwd)
-Request: $PROMPT_REQUEST")
+# We send a clean JSON payload to the remote Ollama server
+PLAN_OUTPUT=$(curl -s "http://$HOST/api/generate" -d "{
+  \"model\": \"$PLANNER_MODEL\",
+  \"prompt\": \"System: $PLANNER_SYSTEM\nContext: $PRETTY_NAME | User: $USER | PWD: $(pwd)\nRequest: $PROMPT_REQUEST\",
+  \"stream\": false
+}" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//' | sed 's/\\n/\n/g' | sed 's/\\"/"/g')
 
 # 2. THE ACTING PHASE 
 echo "🛠️  Actor Executing ($ACTOR_MODEL)..." >&2
 
-FINAL_CMD=$(OLLAMA_HOST="$HOST" ollama run "$ACTOR_MODEL" \
-"System: $ACTOR_SYSTEM
-Plan to convert: $PLAN_OUTPUT" | tr -d '\n\r')
+FINAL_CMD=$(curl -s "http://$HOST/api/generate" -d "{
+  \"model\": \"$ACTOR_MODEL\",
+  \"prompt\": \"System: $ACTOR_SYSTEM\nPlan to convert: $PLAN_OUTPUT\",
+  \"stream\": false
+}" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//' | tr -d '\n\r')
 
 # --- UI & Execution ---
 
