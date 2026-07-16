@@ -9,7 +9,7 @@ Welcome to **Agentic Bash**, a local-first, privacy-respecting script similar to
 ---
 
 <div align="center">
-  <h3>"Why pay Microsoft tons of money to spy on you when you can run open models for cheap and break your own OS with open source?"</h3>
+  <h3>"Why pay Microsoft tons of money to spy on you when you can run open models for cheap and break your own OS with open source?"<p align="right">--Sushimi Bakamoto</p></h3>
 </div>
 
 ---
