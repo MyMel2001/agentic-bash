@@ -21,7 +21,7 @@ Instead of forcing a single LLM to struggle through doing the thinking and the t
 ## FAQ
 
 ***Q: Is my data sent to OpenAI/Microsoft?***
-A: No - not unless you explicitly choose to. It is processed entirely on your local GPU, your own local network server, or an API server of your choosing. If done locally, your terminal history and local directories remain yours. Imagine that.
+A: No - not unless you explicitly choose to. It is processed entirely on your local GPU, your own local network server, or an Ollama-powered cloud server of your choosing. If done locally, your terminal history and local directories remain yours. Imagine that.
 
 ***Q: Can it run on Haiku OS?***
 A: No, because Ollama command isn't on Haiku AFAIK and I can't be damned to port it. Sorry, Sean.
