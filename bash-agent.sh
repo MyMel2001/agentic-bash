@@ -6,7 +6,7 @@ CONFIG_FILE="$CONFIG_DIR/config.sh"
 ACTOR_EXTRA_DEETS="$CONFIG_DIR/actor.md"
 
 
-mkdir "$CONFIG_DIR" > /dev/null 2>&1
+mkdir -p "$CONFIG_DIR" > /dev/null 2>&1
 touch "$CONFIG_FILE"
 touch "$ACTOR_EXTRA_DEETS"
 
