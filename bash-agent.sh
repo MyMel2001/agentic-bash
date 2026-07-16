@@ -5,9 +5,9 @@ CONFIG_DIR="$HOME/.config/nodemixaholic-software/agentic-bash"
 CONFIG_FILE="$CONFIG_DIR/config.sh"
 
 # Sammy's Model Pairing
-PLANNER_MODEL="deepseek-r1:14b" 
-ACTOR_MODEL="ministral-3:8b"
-HOST="http://100.92.246.90:11434"
+PLANNER_MODEL="gemma4:12b" 
+ACTOR_MODEL="deepseek-v4-flash:cloud"
+HOST="100.118.11.83:11434"
 
 # --- System Prompts ---
 
@@ -52,7 +52,7 @@ PLAN_OUTPUT=$(OLLAMA_HOST="$HOST" ollama run "$PLANNER_MODEL" \
 Context: $PRETTY_NAME | User: $USER | PWD: $(pwd)
 Request: $PROMPT_REQUEST")
 
-# 2. THE ACTING PHASE (Ministral-3-8B)
+# 2. THE ACTING PHASE 
 echo "🛠️  Actor Executing ($ACTOR_MODEL)..." >&2
 
 FINAL_CMD=$(OLLAMA_HOST="$HOST" ollama run "$ACTOR_MODEL" \
