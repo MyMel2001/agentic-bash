@@ -4,7 +4,7 @@ Behold. You didn't need a multi-billion dollar AI research division. You didn't 
 
 You just needed a basic understanding of UNIX architecture and about 100 lines of bash script.
 
-Welcome to **Agentic Bash**, a local-first, privacy-respecting "Agentic OS" built on the radical, highly confidential architectural secret that **under Linux and Unix-likes, everything is already a text stream.**
+Welcome to **Agentic Bash**, a local-first, privacy-respecting script similar to an "Agentic OS" built on the radical, highly confidential architectural secret that **under Linux and Unix-likes, everything is already a text stream.**
 
 ---
 
