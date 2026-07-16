@@ -3,6 +3,12 @@
 # --- Configuration Section ---
 CONFIG_DIR="$HOME/.config/nodemixaholic-software/agentic-bash"
 CONFIG_FILE="$CONFIG_DIR/config.sh"
+ACTOR_EXTRA_DEETS="$CONFIG_DIR/actor.md"
+
+
+mkdir CONFIG_DIR > /dev/null 2>&1
+touch "$CONFIG_FILE"
+touch "$ACTOR_EXTRA_DEETS"
 
 # Sammy's Model Pairing
 PLANNER_MODEL="gemma4:12b" 
@@ -32,7 +38,11 @@ ACTOR_SYSTEM="You are a Senior DevOps Engineer. You will receive a technical pla
 Your job is to translate that plan into a single, high-performance, one-line bash command. 
 Rules: No markdown, no explanations, no backticks. Only the executable string.
 Remember to keep it simple, simplicity is the best form of complexity - especially 
-in UNIX-like shell. In other words, do not over complicate commands!"
+in UNIX-like shell. In other words, do not over complicate commands!
+
+Extra details:
+
+$(cat $ACTOR_EXTRA_DEETS)"
 
 # --- Logic Execution ---
 
@@ -42,7 +52,7 @@ if [ -z "$PROMPT_REQUEST" ]; then
     exit 1
 fi
 
-[ -f /etc/os-release ] && . /etc/os-release || PRETTY_NAME="Linux"
+[ -f /etc/os-release ] && . /etc/os-release || PRETTY_NAME="Unix-like"
 
 # 1. THE PLANNING PHASE
 echo "🧠 Planner Thinking ($PLANNER_MODEL)..." >&2
